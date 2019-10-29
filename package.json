@@ -1,16 +1,20 @@
 {
-  "name": "post compamy database",
+  "name": "cs340-DB",
   "version": "1.0.0",
   "description": "Group 65's database for cs340",
   "main": "index.js",
+  "license" : "ISC",
+  "repository": {
+	"type" : "git",
+	"url": "https://github.com/Garishtech/cs340Project.git"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Cristian Mann and Josh Finkbeiner",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.2",
+    "handlebars": ">=4.0.0",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.11.3",
     "mysql": "^2.8.0"
