@@ -12,35 +12,29 @@ app.set('port', process.argv[2]);
 app.use('/', express.static('public'));
 
 app.get('/',function(req,res,next){
-  var context = {};
-  var createString = "CREATE TABLE diagnostic(" +
-  "id INT PRIMARY KEY AUTO_INCREMENT," +
-  "text VARCHAR(255) NOT NULL)";
-  mysql.pool.query('DROP TABLE IF EXISTS diagnostic', function(err){
-    if(err){
-      next(err);
-      return;
-    }
-    mysql.pool.query(createString, function(err){
-      if(err){
-        next(err);
-		return;
-      }
-	  mysql.pool.query('INSERT INTO diagnostic (`text`) VALUES ("MySQL is Working!")',function(err){
-	    mysql.pool.query('SELECT * FROM ph_man', function(err, rows, fields){
-		  context.results = JSON.stringify(rows);
-		  res.render('index',context);
-		});
-	  });
-    });
-  });
+	res.render('index');
 });
 
-//app.use('/phone/', require('./phone.js'));
-//app.use('/manufacturer/', require('./man.js'));
-//app.use('/owner/', require('./owner.js'));
+app.use('/customer', function(req,res,next){
+	res.render('customer');
 
-app.use(function(req,res){
+});
+app.use('/package', function(req,res,next){
+	res.render('package');
+
+});
+app.use('/address', function(req,res,next){
+	res.render('address');
+
+});
+
+
+app.use('/post-company', function(req,res,next){
+	res.render('post-company');
+
+});
+
+app.use(function(req,res,next){
   res.status(404);
   res.render('404');
 });
