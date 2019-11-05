@@ -20,15 +20,12 @@
 <h3>Add a Package</h3>
 <form>
 	<label>Contents: </label> <input type="text" placeholder="Contents" name="content">
-
-	<div class="dropdown">
-		<button class="dropdown-button">
-		<div class="dropdown-content">
-			<a href="#">True</a>
-			<a href="#">False</a>
-		</div>
-	</div>
-
+	<label>Delivery Status:</label>
+	<select>
+		<option value="delivered">Delivery Status</option>
+		<option value ="true">Delivered</option>
+		<option value ="false">En Route</option>
+	</select>
 	<button type="submit">Add</button>
 </form>
 
@@ -36,18 +33,18 @@
 <table>
 	<thead>
 		<th>Contents</th>
-		<th>Delivered</th>
+		<th>Delivery Status</th>
 	</thead>
 	<tbody>
 		<tr>
 			<td>Google Pixel 3a</td>
-			<td>True</td>
+			<td>Delivered</td>
 			<td><button>Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
 		<tr>
 			<td>Exotic Butters</td>
-			<td>False</td>
+			<td>En Route</td>
 			<td><button>Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
