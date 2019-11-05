@@ -6,17 +6,33 @@
 	<li><a href="/post-company">Post Company</a></li>
 </ul>
 
-
 <h1>Customer</h1>
 
+<form>
+	<label>First Name: </label> <input type="text" placeholder="First Name" name="f_name">
+	<label>Last Name: </label> <input type="text" placeholder="Last Name" name="l_name">
+	<button type="submit">Submit</button>
+</form>
 
-<h3>Current Customers: TBA</h3>
-
+<h3>Current Customers:</h3>
 <table>
 	<thead>
+		<th>First Name</th>
+		<th>Last Name</th>
 	</thead>
-	
 	<tbody>
-
+		<tr>
+			<td>John</td>
+			<td>Smith</td>
+			<td><button>Delete</button></td>
+			<td><button>Edit</button></td>
+		</tr>
+		<tr>
+			<td>Jane</td>
+			<td>Doe</td>
+			<td><button>Delete</button></td>
+			<td><button>Edit</button></td>
+		</tr>
 	</tbody>
 </table>
+

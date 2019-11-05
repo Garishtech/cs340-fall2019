@@ -9,14 +9,41 @@
 
 <h1>Package</h1>
 
+<form>
+	<label>Contents: </label> <input type="text" placeholder="Contents" name="content">
 
-<h3>Available packages:: TBA</h3>
+	<div class="dropdown">
+		<button class="dropdown-button">
+		<div class="dropdown-content">
+			<a href="#">True</a>
+			<a href="#">False</a>
+		</div>
+	</div>
 
+	<button type="submit">Submit</button>
+</form>
+
+<h3>Current Packages:</h3>
 <table>
 	<thead>
+		<th>Contents</th>
+		<th>Delivered</th>
 	</thead>
-	
 	<tbody>
-
+		<tr>
+			<td>Google Pixel 3a</td>
+			<td>True</td>
+			<td><button>Delete</button></td>
+			<td><button>Edit</button></td>
+		</tr>
+		<tr>
+			<td>Exotic Butters</td>
+			<td>False</td>
+			<td><button>Delete</button></td>
+			<td><button>Edit</button></td>
+		</tr>
 	</tbody>
 </table>
+
+
+
