@@ -6,11 +6,12 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 app.use('/static', express.static('public'));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
 app.set('mysql', mysql);
-app.use('/', express.static('public'));
+app.use(express.static('public'));
 
 
 function getCustomers(res, mysql, context, complete){
@@ -32,16 +33,32 @@ app.get('/customer', function(req, res, next){
 	var callbackCount = 0;
 	var context = {};
 	var mysql = req.app.get('mysql');
-	getCustomers(req,res, mysql, context, complete);
+	//getCustomers(req,res, mysql, context, complete);
 	console.log(7+6);
-	function complete(){
+	//function complete(){
 	   	console.log(6 + 6);
 		callbackCount++;
 		if(callbackCount >= 1){
 			res.render('customer', context);
 		}
-	}
+	//}
 });
+
+app.post('/customer', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "INSERT INTO customer (first_name, last_name, aid) VALUES (?,?, 10)";
+	var inserts = [req.body.first_name, req.body.last_name];
+	mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+		res.write(JSON.stringify(error));
+		res.end();
+		}
+		else{
+		res.redirect('/customer');
+		}
+	});
+});
+
 
 //app.use('/customer', function(req,res,next){
 //	res.render('customer');

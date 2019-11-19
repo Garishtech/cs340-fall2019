@@ -9,9 +9,9 @@
 <h1>Customer</h1>
 
 <h3>Add a Customer</h3>
-<form>
-	<label>First Name: </label> <input type="text" placeholder="First Name" name="f_name">
-	<label>Last Name: </label> <input type="text" placeholder="Last Name" name="l_name">
+<form id="addCustomer action="/customer" method="post">
+	<label>First Name: </label> <input type="text" placeholder="First Name" name="first_name">
+	<label>Last Name: </label> <input type="text" placeholder="Last Name" name="last_name">
 	<button type="submit">Add</button>
 </form>
 
@@ -22,12 +22,14 @@
 		<th>Last Name</th>
 	</thead>
 	<tbody>
-		<tr>
-			<td>John</td>
-			<td>Smith</td>
-			<td><button>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
+		{{#each customers}}
+			<tr>
+				<td>{{first_name}}</td>
+				<td>{{last_name}}</td>
+				<td><button>Delete</button></td>
+				<td><button>Edit</button></td>
+			</tr>
+		{{/each}}
 		<tr>
 			<td>Jane</td>
 			<td>Doe</td>
