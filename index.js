@@ -14,19 +14,6 @@ app.set('mysql', mysql);
 app.use(express.static('public'));
 
 
-/*function getCustomers(callback_function){
-	var context={}
-	mysql.pool.query("SELECT first_name, last_name, customer_id FROM customer WHERE 1", function(error, results, fields){
-	console.log(results);
-	   if(error){
-		res.write(JSON.stringify(error));
-		res.end();
-	}
-	context.customers = results[0];
-	callback_function(context);
-	});
-}*/
-
 app.get('/',function(req,res,next){
 	res.render('index');
 });
@@ -40,36 +27,105 @@ app.get('/customer', function(req, res, next){
 		res.end();
 	}
 	context.customers = results;
-	console.log(context);
+	//console.log(context);
 	res.render('customer', context);
 	});
 
 });
 
-/*app.get('/customer', function(req, res, next){
-   	var context = {};
-	context.jsscripts = ["delete_customer.js"];
-	function load_page(conext){
-		//console.log(context);
-		res.render('customer', context);
-	}
-	getCustomers(load_page);
-});*/
-
-	
-/*app.get('/customer', function(req, res, next){
-	var callbackCount = 0;
+app.get('/address', function(req, res, next){
 	var context = {};
-	context.jsscripts = ["delete_customer.js"];
+	context.jsscripts = ["delete_address.js"];
+	mysql.pool.query("SELECT house_number, street, city, state, zip_code, address_id FROM address WHERE 1", function(error, results, fields){
+	if(error){
+		res.write(JSON.stringify(error));
+		res.end();
+	}
+	context.address = results;
+	console.log(context);
+	res.render('address', context);
+	});
+
+});
+
+app.get('/package', function(req, res, next){
+	var context = {};
+	context.jsscripts = ["delete_package.js"];
+	mysql.pool.query("SELECT content, delivered, id FROM package WHERE 1", function(error, results, fields){
+	if(error){
+		res.write(JSON.stringify(error));
+		res.end();
+	}
+	context.packages = results;
+	console.log(context);
+	res.render('package', context);
+	});
+
+});
+
+app.get('/post-company', function(req, res, next){
+	var context = {};
+	context.jsscripts = ["delete_post_company.js"];
+	mysql.pool.query("SELECT name, id FROM post_company WHERE 1", function(error, results, fields){
+	if(error){
+		res.write(JSON.stringify(error));
+		res.end();
+	}
+	context.pc = results;
+	console.log(context);
+	res.render('post-company', context);
+	});
+
+});
+
+app.delete('/post-company/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	//getCustomers(req,res, mysql, context, complete);
-	//function complete(){
-		callbackCount++;
-		if(callbackCount >= 1){
-			res.render('customer', context);
+	var sql = "DELETE FROM post_company WHERE id = ?";
+	var inserts = [req.params.id];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			console.log(error)
+			res.write(JSON.stringify(error));
+			res.status(400);
+			res.end();
+		}else{
+			res.status(202).end();
 		}
-	//}
-});*/
+	})
+})
+
+app.delete('/package/:id', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "DELETE FROM package WHERE id = ?";
+	var inserts = [req.params.id];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			console.log(error)
+			res.write(JSON.stringify(error));
+			res.status(400);
+			res.end();
+		}else{
+			res.status(202).end();
+		}
+	})
+})
+
+app.delete('/address/:id', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "DELETE FROM address WHERE address_id = ?";
+	var inserts = [req.params.id];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			console.log(error)
+			res.write(JSON.stringify(error));
+			res.status(400);
+			res.end();
+		}else{
+			res.status(202).end();
+		}
+	})
+})
+
 
 app.delete('/customer/:id', function(req, res){
 	var mysql = req.app.get('mysql');
