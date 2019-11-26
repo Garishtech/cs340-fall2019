@@ -9,7 +9,7 @@
 
 <h1>Post Company</h1>
 
-<form>
+<form id="add post_company" action="/post-company" method="post">
 	<label>Company Name: </label> <input type="text" placeholder="Name" name="name">
 	<button type="submit">Add</button>
 </form>
@@ -19,18 +19,17 @@
 <table>
 	<thead>
 		<th>Name</th>
+		<th>ID</th>
 	</thead>
 	<tbody>
+		{{#each pc}}
 		<tr>
-			<td>UPC</td>
-			<td><button>Delete</button></td>
+			<td>{{name}}</td>
+			<td>{{id}}</td>
+			<td><button onclick=delete_post_company({{id}})>Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
-		<tr>
-			<td>FedUp</td>
-			<td><button>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
+		{{/each}}
 	</tbody>
 </table>
 

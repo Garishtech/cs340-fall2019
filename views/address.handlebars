@@ -9,9 +9,9 @@
 <h1>Address</h1>
 
 <h3>Add an Address</h3>
-<form>
+<form id="Add Address" action="/address" method="post">
 	<label>House Number: </label> <input type="text" placeholder="House Number" name="house_number">
-	<label>Street Address: </label> <input type="text" placeholder="Street Address" name="street_address">
+	<label>Street Address: </label> <input type="text" placeholder="Street Address" name="street">
 	<label>City: </label> <input type="text" placeholder="City" name="city">
 	<label>State: </label> <input type="text" placeholder="State" name="state">
 	<label>Zip Code: </label> <input type="text" placeholder="Zip Code" name="zip_code">
@@ -27,25 +27,20 @@
 		<th>City</th>
 		<th>State</th>
 		<th>Zip Code</th>
+		<th>ID</th>
 	</thead>
 	<tbody>
-		<tr>
-			<td>1234</td>
-			<td>NW Main St.</td>
-			<td>Corvallis</td>
-			<td>Oregon</td>
-			<td>97330</td>
-			<td><button>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
-		<tr>
-			<td>12358</td>
-			<td>SE 25th Ct.</td>
-			<td>Salem</td>
-			<td>Oregon</td>
-			<td>97800</td>
-			<td><button>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
+		{{#each address}}
+			<tr>
+				<td>{{house_number}}</td>
+				<td>{{street}}</td>
+				<td>{{city}}</td>
+				<td>{{state}}</td>
+				<td>{{zip_code}}</td>
+				<td>{{address_id}}</td>
+				<td><button onclick=delete_address({{address_id}})>Delete</button></td>
+				<td><button>Edit</button></td>
+			</tr>
+		{{/each}}
 	</tbody>
 </table>
