@@ -63,9 +63,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `package`;
 CREATE TABLE `package`(
-	`package_id`	varchar(255)	NOT NULL	AUTO_INCREMENT,
+	`package_id`	int(11)		NOT NULL	AUTO_INCREMENT,
 	`content`	varchar(255)	NOT NULL,
-	`delivered`	boolean		NOT NULL	DEFAULT FALSE,
+	`delivered`	boolean		NOT NULL	DEFAULT 0,
 	`cid`		int(11)		NOT NULL,
 	`pcid`		int(11)		NOT NULL,
 	`aid`		int(11)		NOT NULL,
@@ -79,8 +79,8 @@ CREATE TABLE `package`(
 LOCK TABLES WRITE;
 /*!40000 ALTER TABLE `package` DISABLE KEYS */;
 INSERT INTO `package` VALUES
-	(556, 'Toothbrush', FALSE, 11, 4, 10),
-	(762, 'Google Pixel 3a', 20, 4, 20);
+	(556, 'Toothbrush', 0, 11, 4, 10),
+	(762, 'Google Pixel 3a', 1, 20, 4, 20);
 /*!40000 ALTER TABLE `package` ENABLE KEYS */;
 UNLOCK TABLES;
 -------------
@@ -90,7 +90,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `post_company`
 CREATE TABLE `post_company`(
-	`post_company_id` int(11)	NOT NULL	AUTO_INCREMENT
+	`post_company_id` int(11)	NOT NULL	AUTO_INCREMENT,
 	`name`		varchar(255)	NOT NULL,
 )ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
