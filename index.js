@@ -78,6 +78,28 @@ app.get('/post-company', function(req, res, next){
 
 });
 
+//************************************
+//Update Page serving
+//************************************
+app.get('/address/:id', function(req, res){
+	console.log("=== uppdate-address get request")
+
+	var context = {};
+	context.jsscripts = ["update-address.js"];
+	sql = "SELECT house_number, street, city, state, zip_code, address_id  FROM address WHERE address_id = ?";
+	inserts = [req.params.id];
+	mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			res.write(JSON.stringify(error));
+			res.end();
+		}
+	context.address = results[0];
+	console.log(context);
+	res.render('update-address', context);	
+	});
+	
+});
+
 app.delete('/post-company/:id', function(req, res){
 	var mysql = req.app.get('mysql');
 	var sql = "DELETE FROM post_company WHERE id = ?";
@@ -202,6 +224,24 @@ app.post('/post-company', function(req, res){
 		}
 	});
 });
+
+app.put('/address/:id', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "UPDATE address SET house_number=?, street=?, city=?, state=?, zip_code=? WHERE address_id = ?";
+	var inserts = [req.body.house_number, req.body.street, req.body.city, req.body.state, req.body.zip_code, req.params.id];
+	sql = mysql.pool.query(sql, inserts, function(error,results,fields){
+		if(error){
+			console.log(error);
+			res.write(JSON.stringify(error));
+			res.end();
+		}	
+		else{
+			res.status(200)
+			res.end();
+		}
+	});
+});
+
 
 //app.use('/customer', function(req,res,next){
 //	res.render('customer');
