@@ -14,36 +14,62 @@ app.set('mysql', mysql);
 app.use(express.static('public'));
 
 
-function getCustomers(res, mysql, context, complete){
-	mysql.pool.query("SELECT first_name, last_name FROM `customer` WHERE 1", function(error, results, fields){
-	if(error){
+/*function getCustomers(callback_function){
+	var context={}
+	mysql.pool.query("SELECT first_name, last_name, customer_id FROM customer WHERE 1", function(error, results, fields){
+	console.log(results);
+	   if(error){
 		res.write(JSON.stringify(error));
 		res.end();
 	}
 	context.customers = results[0];
-	complete();
+	callback_function(context);
 	});
-}
+}*/
 
 app.get('/',function(req,res,next){
 	res.render('index');
 });
 
 app.get('/customer', function(req, res, next){
+	var context = {};
+	context.jsscripts = ["delete_customer.js"];
+	mysql.pool.query("SELECT first_name, last_name, customer_id FROM customer WHERE 1", function(error, results, fields){
+	if(error){
+		res.write(JSON.stringify(error));
+		res.end();
+	}
+	context.customers = results;
+	console.log(context);
+	res.render('customer', context);
+	});
+
+});
+
+/*app.get('/customer', function(req, res, next){
+   	var context = {};
+	context.jsscripts = ["delete_customer.js"];
+	function load_page(conext){
+		//console.log(context);
+		res.render('customer', context);
+	}
+	getCustomers(load_page);
+});*/
+
+	
+/*app.get('/customer', function(req, res, next){
 	var callbackCount = 0;
 	var context = {};
 	context.jsscripts = ["delete_customer.js"];
 	var mysql = req.app.get('mysql');
 	//getCustomers(req,res, mysql, context, complete);
-	console.log(7+6);
 	//function complete(){
-	   	console.log(6 + 6);
 		callbackCount++;
 		if(callbackCount >= 1){
 			res.render('customer', context);
 		}
 	//}
-});
+});*/
 
 app.delete('/customer/:id', function(req, res){
 	var mysql = req.app.get('mysql');

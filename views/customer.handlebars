@@ -29,17 +29,10 @@
 				<td>{{first_name}}</td>
 				<td>{{last_name}}</td>
 				<td>{{customer_id}}</td>
-				<td><button>Delete</button></td>
+				<td><button onclick=delete_customer({{customer_id}})>Delete</button></td>
 				<td><button>Edit</button></td>
 			</tr>
 		{{/each}}
-		<tr>
-			<td>Jane</td>
-			<td>Doe</td>
-			<td>2</td>
-			<td><button onclick=delete_customer(11)>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
 	</tbody>
 </table>
 
