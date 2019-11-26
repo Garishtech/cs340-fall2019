@@ -12,6 +12,7 @@
 <form id="addCustomer action="/customer" method="post">
 	<label>First Name: </label> <input type="text" placeholder="First Name" name="first_name">
 	<label>Last Name: </label> <input type="text" placeholder="Last Name" name="last_name">
+	<label>Address ID: </label> <input type="text" placeholder="ID" name="aid">
 	<button type="submit">Add</button>
 </form>
 
@@ -20,12 +21,14 @@
 	<thead>
 		<th>First Name</th>
 		<th>Last Name</th>
+		<th>ID</th>
 	</thead>
 	<tbody>
 		{{#each customers}}
 			<tr>
 				<td>{{first_name}}</td>
 				<td>{{last_name}}</td>
+				<td>{{customer_id}}</td>
 				<td><button>Delete</button></td>
 				<td><button>Edit</button></td>
 			</tr>
@@ -33,7 +36,8 @@
 		<tr>
 			<td>Jane</td>
 			<td>Doe</td>
-			<td><button>Delete</button></td>
+			<td>2</td>
+			<td><button onclick=delete_customer(11)>Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
 	</tbody>
