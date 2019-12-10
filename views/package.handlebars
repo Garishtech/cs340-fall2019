@@ -23,9 +23,12 @@
 	<label>Delivery Status:</label>
 	<select>
 		<option value="delivered">Delivery Status</option>
-		<option value ="true">Delivered</option>
-		<option value ="false">En Route</option>
+		<option value =1>Delivered</option>
+		<option value =0>En Route</option>
 	</select>
+	<label>Customer ID: </label> <input type="number" placeholder="Customer ID" name="cid">
+	<label>Post Company ID: </label> <input type="number" placeholder="Post Company ID" name="pcid">
+	<label>Address ID ID: </label> <input type="number" placeholder="Address ID" name="aid">
 	<button type="submit">Add</button>
 </form>
 
@@ -41,8 +44,8 @@
 		<tr>
 			<td>{{content}}</td>
 			<td>{{delivered}}</td>
-			<td>{{id}}</td>
-			<td><button onclick=delete_package({{id}})>Delete</button></td>
+			<td>{{package_id}}</td>
+			<td><button onclick="delete_package({{package_id}})">Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
 		{{/each}}

@@ -25,8 +25,8 @@
 		{{#each pc}}
 		<tr>
 			<td>{{name}}</td>
-			<td>{{id}}</td>
-			<td><button onclick=delete_post_company({{id}})>Delete</button></td>
+			<td>{{post_company_id}}</td>
+			<td><button onclick="delete_post_company({{post_company_id}})">Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
 		{{/each}}
