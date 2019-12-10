@@ -1,0 +1,10 @@
+<html>
+<h1>Update Address at {{address.house_number}} {{address.street}}: </h1>
+<form id ="update-address" action="/address" method="post">
+	House Number: <input type="text" name="house_number" value="{{address.house_number}}"> <br>
+	Street Address: <input type="text" name="street" value="{{address.street}}"> <br>
+	City: <input type="text" name="city" value="{{address.city}}"> <br>
+	Zip Code: <input type"text" name="zip_code" value="{{address.zip_code}}"> <br>
+</form>
+<button onclick="updateAddress({{address.id}})">Update</button>
+<html>

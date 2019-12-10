@@ -18,7 +18,7 @@
 </div>
 
 <h3>Add a Package</h3>
-<form>
+<form id="add package" action="/package" method="post">
 	<label>Contents: </label> <input type="text" placeholder="Contents" name="content">
 	<label>Delivery Status:</label>
 	<select>
@@ -34,20 +34,18 @@
 	<thead>
 		<th>Contents</th>
 		<th>Delivery Status</th>
+		<th>Package ID</th>
 	</thead>
 	<tbody>
+		{{#each packages}}
 		<tr>
-			<td>Google Pixel 3a</td>
-			<td>Delivered</td>
-			<td><button>Delete</button></td>
+			<td>{{content}}</td>
+			<td>{{delivered}}</td>
+			<td>{{id}}</td>
+			<td><button onclick=delete_package({{id}})>Delete</button></td>
 			<td><button>Edit</button></td>
 		</tr>
-		<tr>
-			<td>Exotic Butters</td>
-			<td>En Route</td>
-			<td><button>Delete</button></td>
-			<td><button>Edit</button></td>
-		</tr>
+		{{/each}}
 	</tbody>
 </table>
 
