@@ -20,7 +20,7 @@ CREATE TABLE `customer`(
 	`aid`		int(11)		NOT NULL,
 	PRIMARY KEY (`customer_id`),
 	CONSTRAINT `customer_address` FOREIGN KEY(`aid`) REFERENCES `address`(`address_id`)
-)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 LOCK TABLES `customer` WRITE;
@@ -46,7 +46,7 @@ CREATE TABLE `address`(
 	`state`		varchar(255)	NOT NULL,
 	`zip_code`	int(11)		NOT NULL,
 	PRIMARY KEY(`address_id`)
-)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
@@ -56,6 +56,25 @@ INSERT INTO `address` VALUES
 	(24, 02496, 'S 4th ST', 'Somewhere', 'Alaska', 45006);
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
+---------------------------------------------------
+
+DROP TABLE IF EXISTS `post_company`;
+CREATE TABLE `post_company`(
+	`post_company_id` int(11)	NOT NULL	AUTO_INCREMENT,
+	`name`		varchar(255)	NOT NULL,
+	PRIMARY KEY(`post_company_id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+
+LOCK TABLES `post_company` WRITE;
+/*!40000 ALTER TABLE `post_company` DISABLE KEYS */;
+INSERT INTO `post_company` VALUES
+	(4, 'USPS');
+/*!40000 ALTER TABLE `post_company` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 ---------------
 -- Table structure for package
 --------------
@@ -70,13 +89,14 @@ CREATE TABLE `package`(
 	`pcid`		int(11)		NOT NULL,
 	`aid`		int(11)		NOT NULL,
 	PRIMARY KEY (`package_id`),
-	CONSTRAINT `package_customer` FOREIGN KEY(`cid`) REFERENCES `customer`(`customer_id`),
+	CONSTRAINT `package_customer` FOREIGN KEY (`cid`) REFERENCES `customer`(`customer_id`),
 	CONSTRAINT `package_post_company` FOREIGN KEY (`pcid`) REFERENCES `post_company`(`post_company_id`),
-	CONSTRAINT `package_address` FOREIGN KEY (`aid`) REFERENVES `address` (`address_id`)
-)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+	CONSTRAINT `package_address` FOREIGN KEY (`aid`) REFERENCES `address` (`address_id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
-LOCK TABLES WRITE;
+
+LOCK TABLES `package` WRITE;
 /*!40000 ALTER TABLE `package` DISABLE KEYS */;
 INSERT INTO `package` VALUES
 	(556, 'Toothbrush', 0, 11, 4, 10),
@@ -88,31 +108,17 @@ UNLOCK TABLES;
 ------------
 
 
-DROP TABLE IF EXISTS `post_company`
-CREATE TABLE `post_company`(
-	`post_company_id` int(11)	NOT NULL	AUTO_INCREMENT,
-	`name`		varchar(255)	NOT NULL,
-)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
-
-
-LOCK TABLES `post_company` WRITE;
-/*!40000 ALTER TABLE `post_company` DISABLE KEYS */;
-INSERT INTO `post_company` VALUES
-	(4, 'USPS');
-/*!40000 ALTER TABLE `post_company` ENABLE KEYS */;
-UNLOCK TABLES;
 ------------
 -- Table structure for address to post company many-to-many relationship
 ------------
 
-DROP TABLE IF EXISTS `address_to_post_company`
+DROP TABLE IF EXISTS `address_to_post_company`;
 CREATE TABLE `address_to_post_company`(
 	`aid`	int(11)		NOT NULL,
 	`pcid`	int(11)		NOT NULL,
-	CONSTRAINT `atpc_aid` FOREIGN KEY(`aid`) REFERENCES `address`(`address_id`),
-	CONSTRAINT `atpc_pcid` FOREIGN KEY(`pcid`) REFERNECES `post_company`(`post_company_id`)
-)ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+	CONSTRAINT `atpc_aid` FOREIGN KEY (`aid`) REFERENCES `address`(`address_id`),
+	CONSTRAINT `atpc_pcid` FOREIGN KEY (`pcid`) REFERENCES `post_company`(`post_company_id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `address_to_post_company` WRITE;
 /*!40000 ALTER TABLE `address_to_post_company` DISABLE KEYS */;

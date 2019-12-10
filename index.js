@@ -51,7 +51,7 @@ app.get('/address', function(req, res, next){
 app.get('/package', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_package.js"];
-	mysql.pool.query("SELECT content, delivered, id FROM package WHERE 1", function(error, results, fields){
+	mysql.pool.query("SELECT content, delivered, package_id FROM package WHERE 1", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
@@ -66,7 +66,7 @@ app.get('/package', function(req, res, next){
 app.get('/post-company', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_post_company.js"];
-	mysql.pool.query("SELECT name, id FROM post_company WHERE 1", function(error, results, fields){
+	mysql.pool.query("SELECT name, post_company_id FROM post_company WHERE 1", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
@@ -102,7 +102,7 @@ app.get('/address/:id', function(req, res){
 
 app.delete('/post-company/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "DELETE FROM post_company WHERE id = ?";
+	var sql = "DELETE FROM post_company WHERE post_company_id = ?";
 	var inserts = [req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
@@ -118,7 +118,7 @@ app.delete('/post-company/:id', function(req, res){
 
 app.delete('/package/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "DELETE FROM package WHERE id = ?";
+	var sql = "DELETE FROM package WHERE package_id = ?";
 	var inserts = [req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
@@ -227,16 +227,19 @@ app.post('/post-company', function(req, res){
 
 app.put('/address/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "UPDATE address SET house_number=?, street=?, city=?, state=?, zip_code=? WHERE address_id = ?";
+	var sql = "UPDATE address SET house_number=?, street=?, city=?, state=?, zip_code=? WHERE address_id=?";
 	var inserts = [req.body.house_number, req.body.street, req.body.city, req.body.state, req.body.zip_code, req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error,results,fields){
 		if(error){
+			console.log("ERROR: ");
 			console.log(error);
 			res.write(JSON.stringify(error));
 			res.end();
 		}	
 		else{
-			res.status(200)
+			console.log("Success: ");
+			console.log(results[0]);
+			res.status(200);
 			res.end();
 		}
 	});
