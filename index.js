@@ -18,10 +18,14 @@ app.get('/',function(req,res,next){
 	res.render('index');
 });
 
+
+/***************************************
+ * GET requests
+ * ***********************************/
 app.get('/customer', function(req, res, next){
 	var context = {};
-	context.jsscripts = ["delete_customer.js"];
-	mysql.pool.query("SELECT first_name, last_name, customer_id FROM customer WHERE 1", function(error, results, fields){
+	context.jsscripts = ["delete_customer.js", "delete_package.js"];
+	mysql.pool.query("SELECT first_name, last_name, customer_id FROM customer", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
@@ -36,13 +40,13 @@ app.get('/customer', function(req, res, next){
 app.get('/address', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_address.js"];
-	mysql.pool.query("SELECT house_number, street, city, state, zip_code, address_id FROM address WHERE 1", function(error, results, fields){
+	mysql.pool.query("SELECT house_number, street, city, state, zip_code, address_id FROM address", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
 	}
 	context.address = results;
-	console.log(context);
+	//console.log(context);
 	res.render('address', context);
 	});
 
@@ -51,13 +55,13 @@ app.get('/address', function(req, res, next){
 app.get('/package', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_package.js"];
-	mysql.pool.query("SELECT content, delivered, id FROM package WHERE 1", function(error, results, fields){
+	mysql.pool.query("SELECT content, delivered, package_id FROM package", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
 	}
 	context.packages = results;
-	console.log(context);
+	//console.log(context);
 	res.render('package', context);
 	});
 
@@ -66,20 +70,36 @@ app.get('/package', function(req, res, next){
 app.get('/post-company', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_post_company.js"];
-	mysql.pool.query("SELECT name, id FROM post_company WHERE 1", function(error, results, fields){
+	mysql.pool.query("SELECT name, post_company_id FROM post_company", function(error, results, fields){
 	if(error){
 		res.write(JSON.stringify(error));
 		res.end();
 	}
 	context.pc = results;
-	console.log(context);
+	//console.log(context);
 	res.render('post-company', context);
 	});
 
 });
 
+app.get('/address-to-post', function(req, res, next){
+	var context = {};
+	context.jsscripts = ["delete_address_to_post.js"];
+	mysql.pool.query("SELECT aid as address_id, pcid as post_company_id FROM address_to_post_company", function(error, results, fields){
+		if(error){
+			res.write(JSON.stringify(error));
+			res.end();
+		}
+		context.pc = results;
+		console.log(context);
+		res.render('address-to-post', context);
+	});
+});
+
+
+
 //************************************
-//Update Page serving
+// GET requests for UPDATE
 //************************************
 app.get('/address/:id', function(req, res){
 	console.log("=== uppdate-address get request")
@@ -100,9 +120,13 @@ app.get('/address/:id', function(req, res){
 	
 });
 
+
+/***************************************
+ * DELETE requests
+ * *************************************/
 app.delete('/post-company/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "DELETE FROM post_company WHERE id = ?";
+	var sql = "DELETE FROM post_company WHERE post_company_id = ?";
 	var inserts = [req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
@@ -114,11 +138,11 @@ app.delete('/post-company/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 app.delete('/package/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "DELETE FROM package WHERE id = ?";
+	var sql = "DELETE FROM package WHERE package_id = ?";
 	var inserts = [req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
@@ -130,7 +154,7 @@ app.delete('/package/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 app.delete('/address/:id', function(req, res){
 	var mysql = req.app.get('mysql');
@@ -146,13 +170,18 @@ app.delete('/address/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 
 app.delete('/customer/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "DELETE FROM customer WHERE customer_id = ?";
+	var sql = "DELETE package, customer FROM package INNER JOIN customer WHERE (package.cid=customer.customer_id AND cid=?) OR customer.customer_id = ?";
+	var inserts = [req.params.id, req.params.id];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		console.log("==Customer's packages deleted.\n")});
+	
 	var inserts = [req.params.id];
+       	sql = "DELETE FROM customer WHERE customer_id=?";
 	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
 			console.log(error)
@@ -160,10 +189,37 @@ app.delete('/customer/:id', function(req, res){
 			res.status(400);
 			res.end();
 		}else{
+			console.log("===Customer Deleted\n");
 			res.status(202).end();
 		}
 	})
-})
+});
+
+app.delete('/address-to-post/aid/:aid/pcid/:pcid', function(req, res){
+	console.log("Deleting atiopc....");
+	console.log(req.params.aid);
+	console.log(req.params.pcid);
+
+	var mysql = req.app.get('mysql');
+	var sql = "DELETE FROM address_to_post_company WHERE aid=? AND pcid=?";
+	var inserts = [req.params.aid, req.params.pcid];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			res.write(JSON.stringify(error));
+			res.status(400);
+			res.end();
+		}
+		else{
+			console.log("==AtoPC Success");	
+			res.status(202).end();;
+
+		}
+	})
+});
+
+/************************************
+ * INSERT requests
+ * *********************************/
 
 app.post('/customer', function(req, res){
 	var mysql = req.app.get('mysql');
@@ -197,8 +253,21 @@ app.post('/address', function(req, res){
 
 app.post('/package', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "INSERT INTO package (content, delivered, cid) VALUES (?,0, 10)";
+	var sql = "INSERT INTO package (content, delivered, cid, pcid, aid) VALUES (?,0,?,?,?)";
 	var inserts = [req.body.content];
+	if(req.body.cid == ''){
+		inserts[1] = null;
+	}else{
+		inserts[1] = req.body.cid;}
+	if(req.body.pcid == ''){
+		inserts[2] = null;
+	}else{
+		inserts[2] = req.body.pcid;}
+	if(req.body.aid == ''){
+		inserts[3] = null;
+	}else{
+		inserts[3] = req.body.aid;}
+
 	mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
 		res.write(JSON.stringify(error));
@@ -225,18 +294,41 @@ app.post('/post-company', function(req, res){
 	});
 });
 
+app.post ('/address-to-post', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "INSERT INTO address_to_post_company (aid, pcid) VALUES (?,?)";
+	var inserts = [req.body.aid, req.body.pcid];
+	mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			console.log(error);
+			res.write(JSON.stringify(error));
+			res.end();
+		}
+		else{
+			res.redirect('/address-to-post');
+		}
+	});
+});
+
+/*********************************
+ * UPDATE requests
+ * ******************************/
+
 app.put('/address/:id', function(req, res){
 	var mysql = req.app.get('mysql');
-	var sql = "UPDATE address SET house_number=?, street=?, city=?, state=?, zip_code=? WHERE address_id = ?";
+	var sql = "UPDATE address SET house_number=?, street=?, city=?, state=?, zip_code=? WHERE address_id=?";
 	var inserts = [req.body.house_number, req.body.street, req.body.city, req.body.state, req.body.zip_code, req.params.id];
 	sql = mysql.pool.query(sql, inserts, function(error,results,fields){
 		if(error){
+			console.log("ERROR: ");
 			console.log(error);
 			res.write(JSON.stringify(error));
 			res.end();
 		}	
 		else{
-			res.status(200)
+			console.log("Success: ");
+			console.log(results[0]);
+			res.status(200);
 			res.end();
 		}
 	});
