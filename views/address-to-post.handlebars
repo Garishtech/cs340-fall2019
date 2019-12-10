@@ -1,0 +1,37 @@
+<ul>
+	<li><a href="/">Home</a></li>
+	<li><a href="/customer">Customer</a></li>
+	<li><a href="/address">Address</a></li>
+	<li><a href="/package">Package</a></li>
+	<li><a href="/post-company">Post Company</a></li>
+	<li><a class="active" href="/address-to-post">Address to Post Company</a></li>
+
+</ul>
+
+
+<h1>Addresses and Post Companies</h1>
+
+<form id="add address-to-post" action="/address-to-post" method="post">
+	<label>Post Company ID: </label> <input type="number" placeholder="Post Company" name="pcid">
+	<label>Address ID: </label> <input type="text" placeholder="Address" name="aid">
+	<button type="submit">Add</button>
+</form>
+
+<h3>Current Deliverable Addresses</h3>
+
+<table>
+	<thead>
+		<th>Post Company</th>
+		<th>Address</th>
+	</thead>
+	<tbody>
+		{{#each pc}}
+		<tr>
+			<td>{{post_company_id}}</td>
+			<td>{{address_id}}</td>
+			<td><button onclick="delete_address_to_post({{address_id}}, {{post_company_id}})">Delete</button></td>
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
+
