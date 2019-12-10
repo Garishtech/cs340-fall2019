@@ -18,6 +18,10 @@ app.get('/',function(req,res,next){
 	res.render('index');
 });
 
+
+/***************************************
+ * GET requests
+ * ***********************************/
 app.get('/customer', function(req, res, next){
 	var context = {};
 	context.jsscripts = ["delete_customer.js", "delete_package.js"];
@@ -78,8 +82,24 @@ app.get('/post-company', function(req, res, next){
 
 });
 
+app.get('/address-to-post', function(req, res, next){
+	var context = {};
+	context.jsscripts = ["delete_address_to_post.js"];
+	mysql.pool.query("SELECT aid as address_id, pcid as post_company_id FROM address_to_post_company", function(error, results, fields){
+		if(error){
+			res.write(JSON.stringify(error));
+			res.end();
+		}
+		context.pc = results;
+		console.log(context);
+		res.render('address-to-post', context);
+	});
+});
+
+
+
 //************************************
-//Update Page serving
+// GET requests for UPDATE
 //************************************
 app.get('/address/:id', function(req, res){
 	console.log("=== uppdate-address get request")
@@ -100,6 +120,10 @@ app.get('/address/:id', function(req, res){
 	
 });
 
+
+/***************************************
+ * DELETE requests
+ * *************************************/
 app.delete('/post-company/:id', function(req, res){
 	var mysql = req.app.get('mysql');
 	var sql = "DELETE FROM post_company WHERE post_company_id = ?";
@@ -114,7 +138,7 @@ app.delete('/post-company/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 app.delete('/package/:id', function(req, res){
 	var mysql = req.app.get('mysql');
@@ -130,7 +154,7 @@ app.delete('/package/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 app.delete('/address/:id', function(req, res){
 	var mysql = req.app.get('mysql');
@@ -146,7 +170,7 @@ app.delete('/address/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
 
 
 app.delete('/customer/:id', function(req, res){
@@ -169,7 +193,33 @@ app.delete('/customer/:id', function(req, res){
 			res.status(202).end();
 		}
 	})
-})
+});
+
+app.delete('/address-to-post/aid/:aid/pcid/:pcid', function(req, res){
+	console.log("Deleting atiopc....");
+	console.log(req.params.aid);
+	console.log(req.params.pcid);
+
+	var mysql = req.app.get('mysql');
+	var sql = "DELETE FROM address_to_post_company WHERE aid=? AND pcid=?";
+	var inserts = [req.params.aid, req.params.pcid];
+	sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			res.write(JSON.stringify(error));
+			res.status(400);
+			res.end();
+		}
+		else{
+			console.log("==AtoPC Success");	
+			res.status(202).end();;
+
+		}
+	})
+});
+
+/************************************
+ * INSERT requests
+ * *********************************/
 
 app.post('/customer', function(req, res){
 	var mysql = req.app.get('mysql');
@@ -204,7 +254,20 @@ app.post('/address', function(req, res){
 app.post('/package', function(req, res){
 	var mysql = req.app.get('mysql');
 	var sql = "INSERT INTO package (content, delivered, cid, pcid, aid) VALUES (?,0,?,?,?)";
-	var inserts = [req.body.content, req.body.cid, req.body.pcid, req.body.aid];
+	var inserts = [req.body.content];
+	if(req.body.cid == ''){
+		inserts[1] = null;
+	}else{
+		inserts[1] = req.body.cid;}
+	if(req.body.pcid == ''){
+		inserts[2] = null;
+	}else{
+		inserts[2] = req.body.pcid;}
+	if(req.body.aid == ''){
+		inserts[3] = null;
+	}else{
+		inserts[3] = req.body.aid;}
+
 	mysql.pool.query(sql, inserts, function(error, results, fields){
 		if(error){
 		res.write(JSON.stringify(error));
@@ -230,6 +293,26 @@ app.post('/post-company', function(req, res){
 		}
 	});
 });
+
+app.post ('/address-to-post', function(req, res){
+	var mysql = req.app.get('mysql');
+	var sql = "INSERT INTO address_to_post_company (aid, pcid) VALUES (?,?)";
+	var inserts = [req.body.aid, req.body.pcid];
+	mysql.pool.query(sql, inserts, function(error, results, fields){
+		if(error){
+			console.log(error);
+			res.write(JSON.stringify(error));
+			res.end();
+		}
+		else{
+			res.redirect('/address-to-post');
+		}
+	});
+});
+
+/*********************************
+ * UPDATE requests
+ * ******************************/
 
 app.put('/address/:id', function(req, res){
 	var mysql = req.app.get('mysql');

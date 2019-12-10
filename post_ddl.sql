@@ -85,13 +85,14 @@ CREATE TABLE `package`(
 	`package_id`	int(11)		NOT NULL	AUTO_INCREMENT,
 	`content`	varchar(255)	NOT NULL,
 	`delivered`	boolean		NOT NULL	DEFAULT 0,
-	`cid`		int(11)		NOT NULL,
-	`pcid`		int(11)		NOT NULL,
-	`aid`		int(11)		NOT NULL,
+	`cid`		int(11)		DEFAULT NULL,
+	`pcid`		int(11)		DEFAULT NULL,
+	`aid`		int(11)		DEFAULT NULL,
 	PRIMARY KEY (`package_id`),
-	CONSTRAINT `package_customer` FOREIGN KEY (`cid`) REFERENCES `customer`(`customer_id`),
-	CONSTRAINT `package_post_company` FOREIGN KEY (`pcid`) REFERENCES `post_company`(`post_company_id`),
-	CONSTRAINT `package_address` FOREIGN KEY (`aid`) REFERENCES `address` (`address_id`)
+	KEY `cid`(`cid`),
+	CONSTRAINT `package_customer` FOREIGN KEY (`cid`) REFERENCES `customer`(`customer_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT `package_post_company` FOREIGN KEY (`pcid`) REFERENCES `post_company`(`post_company_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT `package_address` FOREIGN KEY (`aid`) REFERENCES `address` (`address_id`) ON DELETE SET NULL ON UPDATE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
