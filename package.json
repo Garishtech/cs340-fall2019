@@ -13,7 +13,7 @@
   "author": "Cristian Mann and Josh Finkbeiner",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "express": "^4.13.2",
+    "express": "^4.17.3",
     "handlebars": ">=4.0.0",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.11.3",
